@@ -22,12 +22,17 @@ async function checkPassword(request, response) {
             email: user.email
 
         }
-        const token = await jwt.sign(tokenData, process.env.JWT_SECREAT_KEY, { expiresIn: 'id' })
+        const token = await jwt.sign(tokenData, process.env.JWT_SECREAT_KEY, { expiresIn: '1d' })
 
-        return response.status(200).json({
+        const cookieOption = {
+            http: true,
+            secure: true
+        }
+
+        return response.cookie('token', token, cookieOption).status(200).json({
             messgae: "Login Successfully",
             // data: user,
-            token : token,
+            token: token,
             sucess: true
         })
 
@@ -40,3 +45,5 @@ async function checkPassword(request, response) {
         })
     }
 }
+
+module.exports = checkPassword
